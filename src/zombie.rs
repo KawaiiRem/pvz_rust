@@ -4,6 +4,13 @@ use crate::plant::Plant;
 use crate::constants::*;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum ZombieType {
+    Normal,
+    Conehead,
+}
+
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ZombieState {
     Walking,
     Attacking,
@@ -11,9 +18,9 @@ pub enum ZombieState {
 }
 
 pub struct Zombie {
+    pub zombie_type: ZombieType,
     pub x: f32,
     pub y: f32,
-    pub lane: usize,       // row index
     pub health: i32,
     pub state: ZombieState,
     pub speed: f32,
@@ -26,15 +33,20 @@ pub struct Zombie {
 }
 
 impl Zombie {
-    pub fn new(lane: usize) -> Self {
-        let y = lane as f32 * TILE_SIZE + TILE_SIZE / 2.0 + UI_BAR_HEIGHT;
+    pub fn new(y: f32, zombie_type: ZombieType) -> Self {
+
+        let (health, speed) = match zombie_type {
+            ZombieType::Normal => (100, 20.0),
+            ZombieType::Conehead => (200, 20.0), // stronger health, same speed
+        };
+
         Self {
+            zombie_type,
             x: SCREEN_WIDTH,
             y,
-            lane,
-            health: 100,
+            health,
             state: ZombieState::Walking,
-            speed: 20.0,
+            speed,
             attack_damage: 20,
             attack_cooldown: 1.0,
             last_attack_time: 0.0,
@@ -97,7 +109,7 @@ impl Zombie {
             return;
         }
 
-        let color = match self.state {
+        let base_color = match self.state {
             ZombieState::Walking => GREEN,
             ZombieState::Attacking => RED,
             ZombieState::Dead => DARKGRAY,
@@ -106,9 +118,20 @@ impl Zombie {
         let final_color = if self.slow_timer > 0.0 {
             BLUE
         } else {
-            color
+            base_color
         };
 
+        // zombie body
         draw_rectangle(self.x - 20.0, self.y - 40.0, 40.0, 80.0, final_color);
+
+        // cone on head
+        if self.zombie_type == ZombieType::Conehead {
+            draw_triangle(
+                vec2(self.x, self.y - 60.0),
+                vec2(self.x - 20.0, self.y - 40.0),
+                vec2(self.x + 20.0, self.y - 40.0),
+                ORANGE,
+            );
+        }
     }
 }
