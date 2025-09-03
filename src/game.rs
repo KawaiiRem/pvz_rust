@@ -1,3 +1,5 @@
+use std::cmp::min;
+
 use macroquad::prelude::*;
 use crate::grid::Grid;
 use crate::plant::{Plant, PlantAction};
@@ -5,7 +7,7 @@ use crate::plant_bar::UIBar;
 use crate::projectile::Projectile;
 use crate::sun::Sun;
 use crate::constants::*;
-use crate::zombie::{Zombie, ZombieState};
+use crate::zombie::{Zombie, ZombieState, ZombieType};
 
 pub struct Game {
     pub grid: Grid,
@@ -19,6 +21,7 @@ pub struct Game {
     pub zombies: Vec<Zombie>,
     pub zombie_timer: f32,
     pub next_zombie_time: f32,
+    pub zombie_count: i32,
 }
 
 impl Game {
@@ -37,7 +40,11 @@ impl Game {
             ),
             zombies: Vec::new(),
             zombie_timer: 0.0,
-            next_zombie_time: rand::gen_range(5.0, 10.0),
+            next_zombie_time: rand::gen_range(
+                NATURAL_ZOMBIE_MIN_SPAWN_INTERVAL, 
+                NATURAL_ZOMBIE_MAX_SPAWN_INTERVAL,
+            ),
+            zombie_count: 0,
         }
     }
 
@@ -142,14 +149,46 @@ impl Game {
         // --- spawn zombies ---
         self.zombie_timer += dt;
         if self.zombie_timer >= self.next_zombie_time {
-            let lane = rand::gen_range(0, ROWS);
-            let y = lane as f32 * TILE_SIZE + TILE_SIZE / 2.0 + UI_BAR_HEIGHT;
+            let spawn_amount = min(self.zombie_count / 5 + 1, MAX_ZOMBIE_SPAWN);
 
-            self.zombies.push(Zombie::new(lane));
+            let mut chosen_lanes = Vec::new();
+
+            for _ in 0..rand::gen_range(1,spawn_amount + 1) {
+                let mut lane;
+                let mut attempts = 0;
+                loop {
+                    lane = rand::gen_range(0, ROWS);
+                    attempts += 1;
+
+                    if !chosen_lanes.contains(&lane) || attempts > ROWS {
+                        break;
+                    }
+                }
+
+                if !chosen_lanes.contains(&lane) {
+                    chosen_lanes.push(lane);
+
+                    let y = lane as f32 * TILE_SIZE + TILE_SIZE / 2.0 + UI_BAR_HEIGHT;
+
+                    let z_type = if rand::gen_range(0, 4) == 0 && self.zombie_count > 3 {
+                        ZombieType::Conehead
+                    } else {
+                        ZombieType::Normal
+                    };
+
+                    self.zombies.push(Zombie::new(y, z_type));
+                    self.zombie_count += 1;
+                }
+            }
 
             self.zombie_timer = 0.0;
-            self.next_zombie_time = rand::gen_range(5.0, 10.0);
+
+            self.next_zombie_time = rand::gen_range(
+                (NATURAL_ZOMBIE_MIN_SPAWN_INTERVAL - (self.zombie_count as f32 / 50.0)).max(2.0),
+                (NATURAL_ZOMBIE_MAX_SPAWN_INTERVAL - (self.zombie_count as f32 / 50.0)).max(4.0),
+            );
         }
+
     }
 
     pub fn draw(&self) {
