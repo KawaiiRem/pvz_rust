@@ -21,7 +21,7 @@ impl UIBar {
         let mut slots = Vec::new();
         let sun_box_width = 120.0; 
 
-        let plants = [PlantType::Peashooter, PlantType::Sunflower];
+        let plants = [PlantType::Peashooter, PlantType::Sunflower, PlantType::SlowPeashooter];
         for (i, plant) in plants.iter().enumerate() {
             let x = sun_box_width + SLOT_PADDING + i as f32 * (SLOT_SIZE + SLOT_PADDING);
             let y = (UI_BAR_HEIGHT - SLOT_SIZE) / 2.0;
@@ -108,6 +108,7 @@ impl UIBar {
             let text = match slot.plant {
                 PlantType::Peashooter => "P",
                 PlantType::Sunflower => "S",
+                PlantType::SlowPeashooter => "SP",
             };
             draw_text(text, slot.x + 20.0, slot.y + 38.0, 32.0, BLACK);
 

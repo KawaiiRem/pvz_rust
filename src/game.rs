@@ -45,17 +45,15 @@ impl Game {
         let dt = get_frame_time();
         self.plant_bar.update();
 
+        let mouse: Vec2 = mouse_position().into();
+
+        for sun in &mut self.suns {
+            if sun.is_hovered(mouse.x, mouse.y) {
+                self.sun_points += sun.value;
+            }
+        }
         // --- place plant logic ---
         if is_mouse_button_pressed(MouseButton::Left) {
-            let mouse: Vec2 = mouse_position().into();
-
-            // First, check if we clicked a sun
-            for sun in &mut self.suns {
-                if sun.is_clicked(mouse.x, mouse.y) {
-                    self.sun_points += sun.value;
-                }
-            }
-
             // Then, try to place a plant
             if let Some(plant_type) = self.plant_bar.selected {
                 if self.sun_points >= plant_type.cost() {
