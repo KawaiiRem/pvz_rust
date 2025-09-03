@@ -69,8 +69,7 @@ impl Sun {
         }
     }
 
-    /// Returns true if clicked and collected
-    pub fn is_clicked(&mut self, mouse_x: f32, mouse_y: f32) -> bool {
+    pub fn is_hovered(&mut self, mouse_x: f32, mouse_y: f32) -> bool {
         if !self.collected {
             let dx = mouse_x - self.x;
             let dy = mouse_y - self.y;
