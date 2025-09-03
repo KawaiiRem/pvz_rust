@@ -21,7 +21,7 @@ impl UIBar {
         let mut slots = Vec::new();
         let sun_box_width = 120.0; 
 
-        let plants = [PlantType::Peashooter, PlantType::Sunflower, PlantType::SlowPeashooter];
+        let plants = [PlantType::Sunflower, PlantType::Peashooter, PlantType::SlowPeashooter];
         for (i, plant) in plants.iter().enumerate() {
             let x = sun_box_width + SLOT_PADDING + i as f32 * (SLOT_SIZE + SLOT_PADDING);
             let y = (UI_BAR_HEIGHT - SLOT_SIZE) / 2.0;
@@ -104,15 +104,35 @@ impl UIBar {
             let color = if slot.selected { YELLOW } else { WHITE };
             draw_rectangle_lines(slot.x, slot.y, SLOT_SIZE, SLOT_SIZE, 3.0, color);
 
-            // draw icon text
-            let text = match slot.plant {
-                PlantType::Peashooter => "P",
-                PlantType::Sunflower => "S",
-                PlantType::SlowPeashooter => "SP",
-            };
-            draw_text(text, slot.x + 20.0, slot.y + 38.0, 32.0, BLACK);
+            let center_x = slot.x + SLOT_SIZE / 2.0;
+            let center_y = slot.y + SLOT_SIZE / 2.0 - 6.0; 
 
-            // overlay cooldown bar if slot not ready
+            match slot.plant {
+                PlantType::Peashooter => {
+                    draw_circle(center_x, center_y, 12.0, GREEN);
+                    draw_circle(center_x + 12.0, center_y, 6.0, DARKGREEN);
+                }
+                PlantType::SlowPeashooter => {
+                    draw_circle(center_x, center_y, 12.0, BLUE);
+                    draw_circle(center_x + 12.0, center_y, 6.0, DARKBLUE);
+                }
+                PlantType::Sunflower => {
+                    draw_circle(center_x, center_y, 10.0, YELLOW);
+                    draw_circle(center_x, center_y, 6.0, ORANGE);
+                }
+            }
+
+            let cost_text = format!("{}", slot.plant.cost());
+            let text_dim = measure_text(&cost_text, None, 20, 1.0);
+            draw_text(
+                &cost_text,
+                center_x - text_dim.width / 2.0,
+                slot.y + SLOT_SIZE - 4.0,
+                20.0,
+                BLACK,
+            );
+
+            // overlay cooldown bar
             if slot.cooldown > 0.0 {
                 let ratio = slot.cooldown / slot.plant.planting_cooldown();
                 let fill_h = SLOT_SIZE * ratio;
