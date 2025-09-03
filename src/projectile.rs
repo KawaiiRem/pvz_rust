@@ -1,5 +1,5 @@
 use macroquad::prelude::*;
-use crate::{constants::*, projectile};
+use crate::{constants::*};
 use crate::zombie::{Zombie, ZombieState};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
