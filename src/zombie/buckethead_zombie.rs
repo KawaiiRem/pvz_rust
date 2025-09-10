@@ -42,12 +42,18 @@ impl Zombie for BucketheadZombie {
 
     fn draw(&self) {
         self.inner.draw();
-        // draw cone hat
-        draw_triangle(
-            vec2(self.inner.x(), self.inner.y() - 60.0),
-            vec2(self.inner.x() - 20.0, self.inner.y() - 40.0),
-            vec2(self.inner.x() + 20.0, self.inner.y() - 40.0),
-            ORANGE,
+
+        let x = self.inner.x();
+        let y = self.inner.y() - 60.0; 
+        let bucket_width = 40.0;
+        let bucket_height = 30.0;
+
+        draw_rectangle(
+            x - bucket_width / 2.0,
+            y,
+            bucket_width,
+            bucket_height,
+            GRAY,
         );
     }
 }
