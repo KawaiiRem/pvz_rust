@@ -4,7 +4,7 @@ use crate::constants::*;
 use crate::grid::Grid;
 use crate::plant::plant::{Plant, PlantAction};
 use crate::plant_bar::UIBar;
-use crate::plant_factory::create_plant;
+use crate::plant_factory::{create_plant, PlantType};
 use crate::projectile::Projectile;
 use crate::sun::Sun;
 use crate::zombie::zombie::Zombie;
@@ -20,17 +20,17 @@ pub struct Game {
     pub sun_points: i32,
     pub natural_sun_timer: f32,
     pub next_natural_sun_time: f32,
-    pub zombies: Vec<Box<dyn Zombie>>, // ✅ Boxed trait objects
+    pub zombies: Vec<Box<dyn Zombie>>, 
     pub zombie_timer: f32,
     pub next_zombie_time: f32,
     pub zombie_count: i32,
 }
 
 impl Game {
-    pub fn new() -> Self {
+    pub fn new(selected_plants: Vec<PlantType>) -> Self {
         Game {
             grid: Grid::new(),
-            plant_bar: UIBar::new(),
+            plant_bar: UIBar::new(selected_plants),
             plants: Vec::new(),
             projectiles: Vec::new(),
             suns: Vec::new(),
@@ -177,6 +177,15 @@ impl Game {
                 (NATURAL_ZOMBIE_MAX_SPAWN_INTERVAL - (self.zombie_count as f32 / 50.0)).max(4.0),
             );
         }
+    }
+
+    pub fn is_lost(&self) -> bool {
+        for zombie in &self.zombies {
+            if zombie.x() < 0.0 {
+                return true;
+            }
+        }
+        false
     }
 
     pub fn draw(&self) {
