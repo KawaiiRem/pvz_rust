@@ -1,5 +1,5 @@
-use macroquad::prelude::*;
 use crate::constants::*;
+use macroquad::prelude::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Tile {
@@ -34,8 +34,11 @@ impl Grid {
 
     pub fn get_tile_at(&self, mouse: Vec2) -> Option<Tile> {
         for tile in &self.tiles {
-            if mouse.x >= tile.x && mouse.x < tile.x + TILE_SIZE &&
-                mouse.y >= tile.y && mouse.y < tile.y + TILE_SIZE {
+            if mouse.x >= tile.x
+                && mouse.x < tile.x + TILE_SIZE
+                && mouse.y >= tile.y
+                && mouse.y < tile.y + TILE_SIZE
+            {
                 return Some(*tile);
             }
         }

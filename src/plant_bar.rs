@@ -1,6 +1,5 @@
+use crate::{constants::*, plant_factory::PlantType, };
 use macroquad::prelude::*;
-use crate::constants::*;
-use crate::plant::PlantType;
 
 pub struct UISlot {
     pub plant: PlantType,
@@ -19,9 +18,13 @@ pub struct UIBar {
 impl UIBar {
     pub fn new() -> Self {
         let mut slots = Vec::new();
-        let sun_box_width = 120.0; 
+        let sun_box_width = 120.0;
 
-        let plants = [PlantType::Sunflower, PlantType::Peashooter, PlantType::SlowPeashooter];
+        let plants = [
+            PlantType::Sunflower,
+            PlantType::Peashooter,
+            PlantType::SlowPeashooter,
+        ];
         for (i, plant) in plants.iter().enumerate() {
             let x = sun_box_width + SLOT_PADDING + i as f32 * (SLOT_SIZE + SLOT_PADDING);
             let y = (UI_BAR_HEIGHT - SLOT_SIZE) / 2.0;
@@ -34,7 +37,11 @@ impl UIBar {
             });
         }
 
-        UIBar { slots, selected: None, sun_box_width }
+        UIBar {
+            slots,
+            selected: None,
+            sun_box_width,
+        }
     }
 
     pub fn update(&mut self) {
@@ -56,8 +63,11 @@ impl UIBar {
             // Step 1: find clicked slot (immutable iteration)
             let mut clicked: Option<usize> = None;
             for (i, slot) in self.slots.iter().enumerate() {
-                if mouse.x >= slot.x && mouse.x < slot.x + SLOT_SIZE &&
-                   mouse.y >= slot.y && mouse.y < slot.y + SLOT_SIZE {
+                if mouse.x >= slot.x
+                    && mouse.x < slot.x + SLOT_SIZE
+                    && mouse.y >= slot.y
+                    && mouse.y < slot.y + SLOT_SIZE
+                {
                     clicked = Some(i);
                     break;
                 }
@@ -105,7 +115,7 @@ impl UIBar {
             draw_rectangle_lines(slot.x, slot.y, SLOT_SIZE, SLOT_SIZE, 3.0, color);
 
             let center_x = slot.x + SLOT_SIZE / 2.0;
-            let center_y = slot.y + SLOT_SIZE / 2.0 - 6.0; 
+            let center_y = slot.y + SLOT_SIZE / 2.0 - 6.0;
 
             match slot.plant {
                 PlantType::Peashooter => {
@@ -134,7 +144,7 @@ impl UIBar {
 
             // overlay cooldown bar
             if slot.cooldown > 0.0 {
-                let ratio = slot.cooldown / slot.plant.planting_cooldown();
+                let ratio = slot.cooldown / slot.plant.cooldown_time();
                 let fill_h = SLOT_SIZE * ratio;
                 draw_rectangle(
                     slot.x,

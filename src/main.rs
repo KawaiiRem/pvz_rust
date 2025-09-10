@@ -1,14 +1,16 @@
 mod constants;
-mod grid;
 mod game;
-mod plant_bar;
+mod grid;
 mod plant;
+mod plant_bar;
 mod projectile;
 mod sun;
 mod zombie;
+mod plant_factory;
+mod zombie_factory;
 
-use macroquad::prelude::*;
 use game::Game;
+use macroquad::prelude::*;
 
 #[macroquad::main("PVZ Rust")]
 async fn main() {
