@@ -39,6 +39,9 @@ impl Zombie for ConeheadZombie {
     fn is_dead(&self) -> bool {
         self.inner.is_dead()
     }
+    fn is_instakill(&mut self, amount: i32) {
+        self.inner.is_instakill(amount);
+    }
 
     fn draw(&self) {
         self.inner.draw();

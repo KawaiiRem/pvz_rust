@@ -1,4 +1,4 @@
-use crate::plant::{peashooter::Peashooter, plant::Plant, slow_peashooter::SlowPeashooter, sunflower::Sunflower};
+use crate::plant::{peashooter::Peashooter, plant::Plant, potato_mine::PotatoMine, slow_peashooter::SlowPeashooter, sunflower::Sunflower};
 use strum_macros::EnumIter;
 use macroquad::prelude::*;
 
@@ -7,6 +7,7 @@ pub enum PlantType {
     Sunflower,
     Peashooter,
     SlowPeashooter,
+    PotatoMine,
 }
 impl PlantType {
     pub fn cost(&self) -> i32 {
@@ -14,6 +15,7 @@ impl PlantType {
             PlantType::Peashooter => 100,
             PlantType::Sunflower => 50,
             PlantType::SlowPeashooter => 125,
+            PlantType::PotatoMine => 25,
         }
     }
 
@@ -22,22 +24,37 @@ impl PlantType {
             PlantType::Peashooter => 5.0,
             PlantType::Sunflower => 7.5,
             PlantType::SlowPeashooter => 7.5,
+            PlantType::PotatoMine => 25.0,
         }
     }
 
     pub fn draw_preview(&self, x: f32, y: f32) {
         match self {
             PlantType::Peashooter => {
-                draw_circle(x, y, 20.0, GREEN);
-                draw_circle(x + 20.0, y, 10.0, DARKGREEN);
+                draw_circle(x, y, 10.0, GREEN);           // body smaller
+                draw_circle(x + 10.0, y, 5.0, DARKGREEN); // head smaller
             }
             PlantType::Sunflower => {
-                draw_circle(x, y, 18.0, YELLOW);
-                draw_circle(x, y, 10.0, ORANGE);
+                draw_circle(x, y, 9.0, YELLOW);           // outer
+                draw_circle(x, y, 5.0, ORANGE);           // inner
             }
             PlantType::SlowPeashooter => {
-                draw_circle(x, y, 20.0, BLUE);
-                draw_circle(x + 20.0, y, 10.0, DARKBLUE);
+                draw_circle(x, y, 10.0, BLUE);
+                draw_circle(x + 10.0, y, 5.0, DARKBLUE);
+            }
+            PlantType::PotatoMine => {
+                // body
+                draw_circle(x, y, 10.0, ORANGE);
+                draw_circle(x, y, 9.0, BROWN);
+
+                // eyes (scaled down)
+                draw_circle(x, y - 3.5, 1.5, WHITE);
+                draw_circle(x, y + 3.5, 1.5, WHITE);
+                draw_circle(x, y - 3.5, 0.75, BLACK);
+                draw_circle(x, y + 3.5, 0.75, BLACK);
+
+                // fuse
+                draw_circle(x + 7.0, y, 2.0, RED);
             }
         }
     }
@@ -48,5 +65,6 @@ pub fn create_plant(plant_type: PlantType, x: f32, y: f32) -> Box<dyn Plant> {
         PlantType::Peashooter => Box::new(Peashooter::new(x, y)),
         PlantType::SlowPeashooter => Box::new(SlowPeashooter::new(x, y)),
         PlantType::Sunflower => Box::new(Sunflower::new(x, y)),
+        PlantType::PotatoMine => Box::new(PotatoMine::new(x, y)),
     }
 }

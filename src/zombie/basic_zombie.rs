@@ -61,6 +61,10 @@ impl Zombie for BasicZombie {
         }
     }
 
+    fn is_instakill(&mut self, amount: i32) {
+        self.health = 0;
+    }
+
     fn update(&mut self, plants: &mut Vec<Box<dyn Plant>>) {
         if self.state == ZombieState::Dead {
             return;

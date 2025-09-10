@@ -116,14 +116,16 @@ impl PlantSelect {
 
         // show selected plants at the bottom
         draw_text("Selected:", 100.0, 400.0, 30.0, BLACK);
-        for (i, plant) in self.selected.iter().enumerate() {
-            draw_text(
-                &format!("{:?}", plant),
-                120.0 + i as f32 * 150.0,
-                450.0,
-                25.0,
-                DARKBLUE,
-            );
+
+        let mut x_offset = 120.0; // starting x position
+        for plant in &self.selected {
+            let text = format!("{:?}", plant);
+            let metrics = measure_text(&text, None, 25, 1.0);
+
+            draw_text(&text, x_offset, 450.0, 25.0, DARKBLUE);
+
+            // move the x_offset forward by the width of the text + padding
+            x_offset += metrics.width + 30.0;
         }
 
         // instructions

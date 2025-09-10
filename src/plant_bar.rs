@@ -112,20 +112,7 @@ impl UIBar {
             let center_x = slot.x + SLOT_SIZE / 2.0;
             let center_y = slot.y + SLOT_SIZE / 2.0 - 6.0;
 
-            match slot.plant {
-                PlantType::Peashooter => {
-                    draw_circle(center_x, center_y, 12.0, GREEN);
-                    draw_circle(center_x + 12.0, center_y, 6.0, DARKGREEN);
-                }
-                PlantType::SlowPeashooter => {
-                    draw_circle(center_x, center_y, 12.0, BLUE);
-                    draw_circle(center_x + 12.0, center_y, 6.0, DARKBLUE);
-                }
-                PlantType::Sunflower => {
-                    draw_circle(center_x, center_y, 10.0, YELLOW);
-                    draw_circle(center_x, center_y, 6.0, ORANGE);
-                }
-            }
+            slot.plant.draw_preview(center_x, center_y - 6.0);
 
             let cost_text = format!("{}", slot.plant.cost());
             let text_dim = measure_text(&cost_text, None, 20, 1.0);
