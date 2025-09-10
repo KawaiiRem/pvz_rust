@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 macroquad = "0.4.14"
+strum = "0.26"
+strum_macros = "0.26"

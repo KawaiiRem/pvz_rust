@@ -22,3 +22,5 @@ pub const SUN_VALUE: i32 = 25;
 pub const NATURAL_ZOMBIE_MIN_SPAWN_INTERVAL: f32 = 5.0;
 pub const NATURAL_ZOMBIE_MAX_SPAWN_INTERVAL: f32 = 10.0;
 pub const MAX_ZOMBIE_SPAWN: i32 = 4;
+
+pub const MAX_SELECTED_PLANTS: usize = 6;

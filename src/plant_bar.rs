@@ -16,16 +16,11 @@ pub struct UIBar {
 }
 
 impl UIBar {
-    pub fn new() -> Self {
+    pub fn new(selected_plants: Vec<PlantType>) -> Self {
         let mut slots = Vec::new();
         let sun_box_width = 120.0;
 
-        let plants = [
-            PlantType::Sunflower,
-            PlantType::Peashooter,
-            PlantType::SlowPeashooter,
-        ];
-        for (i, plant) in plants.iter().enumerate() {
+        for (i, plant) in selected_plants.iter().enumerate() {
             let x = sun_box_width + SLOT_PADDING + i as f32 * (SLOT_SIZE + SLOT_PADDING);
             let y = (UI_BAR_HEIGHT - SLOT_SIZE) / 2.0;
             slots.push(UISlot {

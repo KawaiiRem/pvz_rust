@@ -1,13 +1,13 @@
 use crate::plant::{peashooter::Peashooter, plant::Plant, slow_peashooter::SlowPeashooter, sunflower::Sunflower};
+use strum_macros::EnumIter;
+use macroquad::prelude::*;
 
-
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, EnumIter)]
 pub enum PlantType {
-    Peashooter,
     Sunflower,
+    Peashooter,
     SlowPeashooter,
 }
-
 impl PlantType {
     pub fn cost(&self) -> i32 {
         match self {
@@ -22,6 +22,23 @@ impl PlantType {
             PlantType::Peashooter => 5.0,
             PlantType::Sunflower => 7.5,
             PlantType::SlowPeashooter => 7.5,
+        }
+    }
+
+    pub fn draw_preview(&self, x: f32, y: f32) {
+        match self {
+            PlantType::Peashooter => {
+                draw_circle(x, y, 20.0, GREEN);
+                draw_circle(x + 20.0, y, 10.0, DARKGREEN);
+            }
+            PlantType::Sunflower => {
+                draw_circle(x, y, 18.0, YELLOW);
+                draw_circle(x, y, 10.0, ORANGE);
+            }
+            PlantType::SlowPeashooter => {
+                draw_circle(x, y, 20.0, BLUE);
+                draw_circle(x + 20.0, y, 10.0, DARKBLUE);
+            }
         }
     }
 }
