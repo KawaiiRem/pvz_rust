@@ -1,6 +1,5 @@
+use crate::{constants::*, zombie::zombie::Zombie};
 use macroquad::prelude::*;
-use crate::{constants::*};
-use crate::zombie::{Zombie, ZombieState};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum ProjectileType {
@@ -20,7 +19,7 @@ pub struct Projectile {
 
 impl Projectile {
     pub fn new(x: f32, y: f32, projectile_type: ProjectileType) -> Self {
-        match projectile_type{
+        match projectile_type {
             ProjectileType::Normal => Self {
                 x,
                 y,
@@ -32,7 +31,7 @@ impl Projectile {
             ProjectileType::Slow => Self {
                 x,
                 y,
-                speed: 300.0, // pixels per second
+                speed: 300.0,
                 damage: 10,
                 active: true,
                 projectile_type,
@@ -40,11 +39,12 @@ impl Projectile {
         }
     }
 
-    pub fn update(&mut self, dt: f32, zombies: &mut Vec<Zombie>) {
+    pub fn update(&mut self, dt: f32, zombies: &mut Vec<Box<dyn Zombie>>) {
         if !self.active {
             return;
         }
 
+        // move projectile
         self.x += self.speed * dt;
 
         // out of screen
@@ -53,18 +53,20 @@ impl Projectile {
             return;
         }
 
-        // check collisions
+        // check collisions against every zombie
         for zombie in zombies.iter_mut() {
-            if zombie.state == ZombieState::Dead {
+            if zombie.is_dead() {
                 continue;
             }
 
-            if (zombie.y - self.y).abs() < TILE_HEIGHT / 2.0 &&
-               (zombie.x - self.x).abs() < 20.0 { // hitbox
-                zombie.health -= self.damage;
+            let same_row = (zombie.y() - self.y).abs() < TILE_HEIGHT / 2.0;
+            let hitbox = (zombie.x() - self.x).abs() < 20.0;
+
+            if same_row && hitbox {
+                zombie.take_damage(self.damage);
 
                 if self.projectile_type == ProjectileType::Slow {
-                    zombie.apply_slow(2.5);
+                    zombie.apply_slow(2.5); // <-- requires Zombie trait to have this
                 }
 
                 self.active = false;
@@ -77,9 +79,10 @@ impl Projectile {
         if !self.active {
             return;
         }
+
         match self.projectile_type {
             ProjectileType::Normal => draw_circle(self.x, self.y, 5.0, DARKGREEN),
-            ProjectileType::Slow   => draw_circle(self.x, self.y, 6.0, DARKBLUE),
+            ProjectileType::Slow => draw_circle(self.x, self.y, 6.0, DARKBLUE),
         }
     }
 }

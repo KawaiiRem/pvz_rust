@@ -1,5 +1,5 @@
-use macroquad::prelude::*;
 use crate::constants::*;
+use macroquad::prelude::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SunSource {
@@ -11,7 +11,7 @@ pub enum SunSource {
 pub struct Sun {
     pub x: f32,
     pub y: f32,
-    pub target_y: f32,   // where the sun will stop
+    pub target_y: f32, // where the sun will stop
     pub speed: f32,
     pub collected: bool,
     pub value: i32,
@@ -21,7 +21,11 @@ pub struct Sun {
 impl Sun {
     /// Spawn a sun produced by a plant
     pub fn from_plant(x: f32, y: f32) -> Self {
-        let offset_x = if rand::gen_range(0, 2) == 0 { -20.0 } else { 20.0 };
+        let offset_x = if rand::gen_range(0, 2) == 0 {
+            -20.0
+        } else {
+            20.0
+        };
         let target_y = y + TILE_SIZE / 2.0; // drop just below the plant
         Self {
             x: x + offset_x,
