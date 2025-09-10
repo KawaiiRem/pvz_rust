@@ -1,4 +1,19 @@
-use crate::zombie::{basic_zombie::BasicZombie, buckethead_zombie::BucketheadZombie, conehead_zombie::ConeheadZombie, zombie::Zombie};
+use crate::zombie::{
+    basic_zombie::BasicZombie,
+    buckethead_zombie::BucketheadZombie,
+    conehead_zombie::ConeheadZombie,
+    zombie::Zombie,
+};
+use macroquad::rand::{self, ChooseRandom}; // <-- use macroquad RNG + trait for choose()
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum Rarity {
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Boss,
+}
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum ZombieType {
@@ -11,6 +26,72 @@ pub fn create_zombie(zombie_type: ZombieType, y: f32) -> Box<dyn Zombie> {
     match zombie_type {
         ZombieType::Basic => Box::new(BasicZombie::new(y)),
         ZombieType::Conehead => Box::new(ConeheadZombie::new(y)),
-        ZombieType::Buckethead => Box::new(BucketheadZombie::new(y)), 
+        ZombieType::Buckethead => Box::new(BucketheadZombie::new(y)),
     }
+}
+
+
+fn base_rarity_weights() -> Vec<(Rarity, f32)> {
+    vec![
+        (Rarity::Common, 0.7),
+        (Rarity::Uncommon, 0.2),
+        (Rarity::Rare, 0.08),
+        (Rarity::Epic, 0.015),
+        (Rarity::Boss, 0.005),
+    ]
+}
+
+fn get_scaled_rarity_weights(zombie_count: usize) -> Vec<(Rarity, f32)> {
+    let mut weights = base_rarity_weights();
+    let difficulty = (zombie_count as f32 / 50.0).min(1.0);
+
+    for (rarity, w) in &mut weights {
+        match rarity {
+            Rarity::Common   => *w *= 1.0 - 0.5 * difficulty,
+            Rarity::Uncommon => *w *= 1.0 + 0.2 * difficulty,
+            Rarity::Rare     => *w *= 1.0 + 1.0 * difficulty,
+            Rarity::Epic     => *w *= 1.0 + 3.0 * difficulty,
+            Rarity::Boss     => *w *= 1.0 + 6.0 * difficulty,
+        }
+    }
+
+    let sum: f32 = weights.iter().map(|(_, w)| w).sum();
+    for (_, w) in &mut weights {
+        *w /= sum;
+    }
+
+    weights
+}
+
+fn pick_rarity(zombie_count: usize) -> Rarity {
+    let roll: f32 = rand::gen_range(0.0, 1.0); 
+    let weights = get_scaled_rarity_weights(zombie_count);
+
+    let mut acc = 0.0;
+    for (rarity, weight) in weights {
+        acc += weight;
+        if roll < acc {
+            return rarity;
+        }
+    }
+    Rarity::Common
+}
+
+fn zombies_by_rarity(rarity: Rarity) -> Vec<ZombieType> {
+    match rarity {
+        Rarity::Common   => vec![ZombieType::Basic],
+        Rarity::Uncommon => vec![ZombieType::Conehead],
+        Rarity::Rare     => vec![ZombieType::Buckethead],
+        Rarity::Epic     => vec![ZombieType::Conehead, ZombieType::Buckethead],
+        Rarity::Boss     => vec![ZombieType::Buckethead], // later: add Boss type
+    }
+}
+
+pub fn spawn_random_zombie(y: f32, zombie_count: usize) -> Box<dyn Zombie> {
+    let rarity = pick_rarity(zombie_count);
+    let pool = zombies_by_rarity(rarity);
+
+    // `choose` comes from macroquad::rand::ChooseRandom
+    let zombie_type = *pool.choose().unwrap_or(&ZombieType::Basic);
+    create_zombie(zombie_type, y)
 }

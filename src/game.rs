@@ -8,7 +8,7 @@ use crate::plant_factory::create_plant;
 use crate::projectile::Projectile;
 use crate::sun::Sun;
 use crate::zombie::zombie::Zombie;
-use crate::zombie_factory::{create_zombie, ZombieType};
+use crate::zombie_factory::{spawn_random_zombie};
 use macroquad::prelude::*;
 
 pub struct Game {
@@ -145,7 +145,6 @@ impl Game {
                 rand::gen_range(NATURAL_SUN_MIN_INTERVAL, NATURAL_SUN_MAX_INTERVAL);
         }
 
-        // --- spawn zombies ---
         self.zombie_timer += dt;
         if self.zombie_timer >= self.next_zombie_time {
             let spawn_amount = min(self.zombie_count / 5 + 1, MAX_ZOMBIE_SPAWN);
@@ -167,15 +166,7 @@ impl Game {
 
                     let y = lane as f32 * TILE_SIZE + TILE_SIZE / 2.0 + UI_BAR_HEIGHT;
 
-                    // pick zombie type
-                    let z_type = if rand::gen_range(0, 4) == 0 && self.zombie_count > 3 {
-                        ZombieType::Conehead
-                    } else {
-                        ZombieType::Basic
-                    };
-
-                    // spawn zombie using factory
-                    self.zombies.push(create_zombie(z_type, y));
+                    self.zombies.push(spawn_random_zombie(y, self.zombie_count.try_into().unwrap()));
                     self.zombie_count += 1;
                 }
             }
