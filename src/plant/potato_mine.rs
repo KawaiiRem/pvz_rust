@@ -61,38 +61,56 @@ impl Plant for PotatoMine {
     fn update(&mut self, dt: f32, zombies: &[Box<dyn Zombie>]) -> Option<PlantAction> {
         self.timer -= dt;
 
-        let has_target = self.has_target(zombies);
-        self.is_attacking = has_target;
+        if !self.is_attacking {
+            let has_target = self.has_target(zombies);
 
-        if has_target && self.timer <= 0.0 {
-            self.health = 0;
-            return Some(PlantAction::Shoot {
-                kind: ProjectileKind::Instakill {
-                    radius: TILE_SIZE * 1.5,
-                    tier: Instakill::Low,
-                },
-                x: self.x,
-                y: self.y,
-            });
+            if has_target && self.timer <= 0.0 {
+                self.is_attacking = true;
+                self.timer = 0.8;
+            }
+        } else {
+            if self.timer <= 0.0 {
+                self.health = 0;
+                return Some(PlantAction::Shoot {
+                    kind: ProjectileKind::Instakill {
+                        radius: TILE_SIZE * 1.5,
+                        tier: Instakill::Low,
+                    },
+                    x: self.x,
+                    y: self.y,
+                });
+            }
         }
         None
     }
 
     fn draw(&self) {
-        if self.timer > 0.0 {
+        if self.timer > 0.0 && !self.is_attacking {
             // not armed yet → buried look
             draw_circle(self.x, self.y, 15.0, BROWN);
             draw_circle(self.x + 5.0, self.y, 10.0, DARKBROWN);
         } else {
             // armed → full potato mine
-            draw_circle(self.x, self.y, 20.0, ORANGE);
+            // Flash effect when timer < 1.0 before explosion
+            let flash = if self.is_attacking {
+                let phase = (self.timer * 10.0).sin(); // oscillates
+                phase > 0.0
+            } else {
+                false
+            };
+
+            let main_color = if flash { YELLOW } else { ORANGE };
+
+            draw_circle(self.x, self.y, 20.0, main_color);
             draw_circle(self.x, self.y, 18.0, BROWN);
 
+            // eyes
             draw_circle(self.x, self.y - 7.0, 3.0, WHITE);
             draw_circle(self.x, self.y + 7.0, 3.0, WHITE);
             draw_circle(self.x, self.y - 7.0, 1.5, BLACK);
             draw_circle(self.x, self.y + 7.0, 1.5, BLACK);
 
+            // fuse indicator
             draw_circle(self.x + 12.0, self.y - 8.0, 4.0, RED);
         }
     }

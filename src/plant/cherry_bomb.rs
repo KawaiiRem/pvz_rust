@@ -60,31 +60,73 @@ impl Plant for CherryBomb {
     }
 
     fn draw(&self) {
+        // Growing effect: scale grows as timer approaches 0
+        let max_scale = 1.5;
+        let min_scale = 1.0;
+        let scale = if self.timer > 0.0 {
+            let progress = (1.5 - self.timer) / 1.5; // progress from 0 → 1
+            min_scale + (max_scale - min_scale) * progress.clamp(0.0, 1.0)
+        } else {
+            max_scale
+        };
+
+        let left_x = self.x - 12.0;
+        let right_x = self.x + 12.0;
+        let y = self.y;
+        let radius = 14.0 * scale;
+
         // Left cherry
-        draw_circle(self.x - 12.0, self.y, 14.0, RED);
+        draw_circle(left_x, y, radius, RED);
         // Right cherry
-        draw_circle(self.x + 12.0, self.y, 14.0, RED);
+        draw_circle(right_x, y, radius, RED);
 
         // Cherry shine highlight
-        draw_circle(self.x - 15.0, self.y - 5.0, 4.0, PINK);
-        draw_circle(self.x + 9.0, self.y - 5.0, 4.0, PINK);
+        draw_circle(left_x - 3.0 * scale, y - 5.0 * scale, 4.0 * scale * 0.3, PINK);
+        draw_circle(right_x - 3.0 * scale, y - 5.0 * scale, 4.0 * scale * 0.3, PINK);
 
         // Green stem
         draw_line(
-            self.x - 5.0,
-            self.y - 14.0,
-            self.x + 5.0,
-            self.y - 22.0,
-            3.0,
+            self.x - 5.0 * scale,
+            self.y - 14.0 * scale,
+            self.x + 5.0 * scale,
+            self.y - 22.0 * scale,
+            3.0 * scale,
             DARKGREEN,
         );
 
-        // Small leaf on stem
+        // Leaf on stem
         draw_triangle(
-            vec2(self.x + 5.0, self.y - 22.0),
-            vec2(self.x + 12.0, self.y - 28.0),
-            vec2(self.x, self.y - 26.0),
+            vec2(self.x + 5.0 * scale, self.y - 22.0 * scale),
+            vec2(self.x + 12.0 * scale, self.y - 28.0 * scale),
+            vec2(self.x, self.y - 26.0 * scale),
             GREEN,
+        );
+
+        // Faces on cherries
+        let eye_offset_y = -2.0 * scale;
+
+        // Left cherry face
+        draw_circle(left_x - 2.0, y + eye_offset_y, 2.0 * scale * 0.3, BLACK);
+        draw_circle(left_x + 2.0, y + eye_offset_y, 2.0 * scale * 0.3, BLACK);
+        draw_line(
+            left_x - 2.0,
+            y + 4.0 * scale * 0.3,
+            left_x + 2.0,
+            y + 4.0 * scale * 0.3,
+            1.0 * scale * 0.3,
+            BLACK,
+        );
+
+        // Right cherry face
+        draw_circle(right_x - 2.0, y + eye_offset_y, 2.0 * scale * 0.3, BLACK);
+        draw_circle(right_x + 2.0, y + eye_offset_y, 2.0 * scale * 0.3, BLACK);
+        draw_line(
+            right_x - 2.0,
+            y + 4.0 * scale * 0.3,
+            right_x + 2.0,
+            y + 4.0 * scale * 0.3,
+            1.0 * scale * 0.3,
+            BLACK,
         );
     }
 }

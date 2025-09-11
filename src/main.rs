@@ -24,6 +24,7 @@ fn window_conf() -> Conf {
         window_width: SCREEN_WIDTH as i32,
         window_height: SCREEN_HEIGHT as i32 + 100,
         fullscreen: false,
+        window_resizable: false,
         ..Default::default()
     }
 }

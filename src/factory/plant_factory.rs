@@ -119,6 +119,33 @@ impl PlantType {
 
                 // Green stem
                 draw_line(x - 2.5, y - 7.0, x + 2.5, y - 11.0, 1.5, DARKGREEN);
+
+                let eye_offset_y = -1.0;
+                let mouth_offset_y = 2.0;
+
+                // Left cherry face
+                draw_circle(x - 8.0, y + eye_offset_y, 1.0, BLACK); // left eye
+                draw_circle(x - 4.0, y + eye_offset_y, 1.0, BLACK); // right eye
+                draw_line(
+                    x - 7.0,
+                    y + mouth_offset_y,
+                    x - 5.0,
+                    y + mouth_offset_y,
+                    1.0,
+                    BLACK,
+                ); // mouth
+
+                // Right cherry face
+                draw_circle(x + 4.0, y + eye_offset_y, 1.0, BLACK); // left eye
+                draw_circle(x + 8.0, y + eye_offset_y, 1.0, BLACK); // right eye
+                draw_line(
+                    x + 5.0,
+                    y + mouth_offset_y,
+                    x + 7.0,
+                    y + mouth_offset_y,
+                    1.0,
+                    BLACK,
+                ); // mouth
             }
         }
     }

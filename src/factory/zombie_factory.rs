@@ -32,11 +32,11 @@ pub fn create_zombie(zombie_type: ZombieType, y: f32) -> Box<dyn Zombie> {
 
 fn base_rarity_weights() -> Vec<(Rarity, f32)> {
     vec![
-        (Rarity::Common, 0.7),
-        (Rarity::Uncommon, 0.2),
-        (Rarity::Rare, 0.07),
-        (Rarity::Epic, 0.015),
-        (Rarity::Boss, 0.005),
+        (Rarity::Common, 0.8),
+        (Rarity::Uncommon, 0.155),
+        (Rarity::Rare, 0.04),
+        (Rarity::Epic, 0.0049),
+        (Rarity::Boss, 0.0001),
     ]
 }
 
@@ -46,11 +46,11 @@ fn get_scaled_rarity_weights(zombie_count: usize) -> Vec<(Rarity, f32)> {
 
     for (rarity, w) in &mut weights {
         match rarity {
-            Rarity::Common => *w *= 1.0 - 0.5 * difficulty,
-            Rarity::Uncommon => *w *= 1.0 + 0.2 * difficulty,
-            Rarity::Rare => *w *= 1.0 + 1.0 * difficulty,
-            Rarity::Epic => *w *= 1.0 + 3.0 * difficulty,
-            Rarity::Boss => *w *= 1.0 + 6.0 * difficulty,
+            Rarity::Common => *w *= 1.0 - 0.4 * difficulty,
+            Rarity::Uncommon => *w *= 1.0 + 0.3 * difficulty,
+            Rarity::Rare => *w *= 1.0 + 0.6 * difficulty,
+            Rarity::Epic => *w *= 1.0 + 1.0 * difficulty,
+            Rarity::Boss => *w *= 1.0 + 1.5 * difficulty,
         }
     }
 
@@ -78,7 +78,7 @@ fn pick_rarity(zombie_count: usize) -> Rarity {
 
 fn zombies_by_rarity(rarity: Rarity) -> Vec<ZombieType> {
     match rarity {
-        Rarity::Common => vec![ZombieType::Basic, ZombieType::PoleZombie],
+        Rarity::Common => vec![ZombieType::Basic],
         Rarity::Uncommon => vec![ZombieType::Conehead, ZombieType::PoleZombie],
         Rarity::Rare => vec![ZombieType::Conehead],
         Rarity::Epic => vec![ZombieType::Buckethead],
