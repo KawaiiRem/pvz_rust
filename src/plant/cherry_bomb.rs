@@ -38,6 +38,10 @@ impl Plant for CherryBomb {
         self.health -= amount;
     }
 
+    fn is_tall(&self) -> bool {
+        false
+    }
+
     fn update(&mut self, dt: f32, zombies: &[Box<dyn Zombie>]) -> Option<PlantAction> {
         self.timer -= dt;
 

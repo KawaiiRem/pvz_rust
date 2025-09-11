@@ -30,6 +30,9 @@ impl Plant for Wallnut {
     fn health(&self) -> i32 {
         self.current_health
     }
+    fn is_tall(&self) -> bool {
+        false
+    }
 
     fn take_damage(&mut self, amount: i32) {
         self.current_health -= amount;
