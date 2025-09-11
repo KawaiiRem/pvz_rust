@@ -2,10 +2,27 @@ use crate::{constants::*, zombie::zombie::Zombie};
 use macroquad::prelude::*;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
+pub enum Instakill{
+    Low,
+    Medium,
+    High,
+}
+impl Instakill {
+    // if zombie resists instakill, it loses this fraction of its max health instead
+    pub fn hp_fraction(&self) -> f32 {
+        match self {
+            Instakill::Low => 0.10,    
+            Instakill::Medium => 0.25, 
+            Instakill::High => 0.50,   
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ProjectileType {
     Normal,
     Slow,
-    Explosive { radius: f32 },
+    Instakill { radius: f32, tier: Instakill },
 }
 
 #[derive(Debug)]
@@ -40,13 +57,13 @@ impl Projectile {
                 projectile_type,
                 lifetime: 0.0,
             },
-            ProjectileType::Explosive { radius } => Self {
+            ProjectileType::Instakill { radius, tier } => Self {
                 x,
                 y,
                 speed: 0.0,
                 damage: -1,
                 active: true,
-                projectile_type: ProjectileType::Explosive { radius: radius },
+                projectile_type: ProjectileType::Instakill { radius: radius, tier: tier },
                 lifetime: 0.6,
             },
         }
@@ -90,7 +107,7 @@ impl Projectile {
                 }
             }
 
-            ProjectileType::Explosive { radius } => {
+            ProjectileType::Instakill { radius , tier} => {
                 self.lifetime -= dt;
 
                 // damage zombies in radius
@@ -101,7 +118,7 @@ impl Projectile {
                     let dx = z.x() - self.x;
                     let dy = z.y() - self.y;
                     if (dx * dx + dy * dy).sqrt() <= *radius {
-                        z.is_instakill(self.damage); 
+                        z.is_instakill(*tier); 
                     }
                 }
 
@@ -124,7 +141,7 @@ impl Projectile {
             ProjectileType::Slow => {
                 draw_circle(self.x, self.y, 6.0, DARKBLUE);
             }
-            ProjectileType::Explosive { radius } => {
+            ProjectileType::Instakill { radius, tier } => {
                 let alpha = (self.lifetime * 2.0).min(1.0);
                 let color = Color::new(1.0, 0.2, 0.2, alpha);
                 draw_circle(self.x, self.y, radius, color);
