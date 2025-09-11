@@ -1,7 +1,9 @@
 use macroquad::prelude::*;
 
 use crate::{
-    plant::plant::Plant, projectile::projectile::Instakill, zombie::{basic_zombie::BasicZombie, zombie::Zombie}
+    plant::plant::Plant,
+    projectile::projectile::Instakill,
+    zombie::{basic_zombie::BasicZombie, zombie::Zombie},
 };
 
 pub struct ConeheadZombie {

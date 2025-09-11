@@ -22,9 +22,9 @@ impl NormalPea {
 }
 
 impl Projectile for NormalPea {
-    fn x(&self) -> f32 { self.x }
-    fn y(&self) -> f32 { self.y }
-    fn is_active(&self) -> bool { self.active }
+    fn is_active(&self) -> bool {
+        self.active
+    }
 
     fn update(&mut self, dt: f32, zombies: &mut Vec<Box<dyn Zombie>>) {
         self.x += self.speed * dt;
@@ -35,7 +35,9 @@ impl Projectile for NormalPea {
         }
 
         for z in zombies.iter_mut() {
-            if z.is_dead() { continue; }
+            if z.is_dead() {
+                continue;
+            }
             let same_row = (z.y() - self.y).abs() < TILE_HEIGHT / 2.0;
             let hitbox = (z.x() - self.x).abs() < 20.0;
             if same_row && hitbox {

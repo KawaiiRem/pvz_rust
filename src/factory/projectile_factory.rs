@@ -1,4 +1,9 @@
-use crate::projectile::{instakill_explode::InstakillExplode, normal_pea::NormalPea, projectile::{Instakill, Projectile}, slow_pea::SlowPea};
+use crate::projectile::{
+    instakill_explode::InstakillExplode,
+    normal_pea::NormalPea,
+    projectile::{Instakill, Projectile},
+    slow_pea::SlowPea,
+};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum ProjectileKind {
@@ -14,8 +19,9 @@ impl ProjectileFactory {
         match kind {
             ProjectileKind::Normal => Box::new(NormalPea::new(x, y)),
             ProjectileKind::Slow => Box::new(SlowPea::new(x, y)),
-            ProjectileKind::Instakill { radius, tier } =>
-                Box::new(InstakillExplode::new(x, y, radius, tier)),
+            ProjectileKind::Instakill { radius, tier } => {
+                Box::new(InstakillExplode::new(x, y, radius, tier))
+            }
         }
     }
 }

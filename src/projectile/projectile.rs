@@ -20,8 +20,6 @@ impl Instakill {
 }
 
 pub trait Projectile {
-    fn x(&self) -> f32;
-    fn y(&self) -> f32;
     fn is_active(&self) -> bool;
 
     fn update(&mut self, dt: f32, zombies: &mut Vec<Box<dyn Zombie>>);

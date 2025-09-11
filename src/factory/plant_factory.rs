@@ -1,6 +1,9 @@
-use crate::plant::{peashooter::Peashooter, plant::Plant, potato_mine::PotatoMine, slow_peashooter::SlowPeashooter, sunflower::Sunflower, wallnut::Wallnut};
-use strum_macros::EnumIter;
+use crate::plant::{
+    cherry_bomb::CherryBomb, peashooter::Peashooter, plant::Plant, potato_mine::PotatoMine,
+    slow_peashooter::SlowPeashooter, sunflower::Sunflower, wallnut::Wallnut,
+};
 use macroquad::prelude::*;
+use strum_macros::EnumIter;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, EnumIter)]
 pub enum PlantType {
@@ -9,6 +12,7 @@ pub enum PlantType {
     SlowPeashooter,
     PotatoMine,
     Wallnut,
+    CherryBomb,
 }
 impl PlantType {
     pub fn description(&self) -> &'static str {
@@ -18,6 +22,7 @@ impl PlantType {
             PlantType::SlowPeashooter => "Shoots peas that slow down zombies.",
             PlantType::PotatoMine => "Explodes when a zombie steps on it when fully grown.",
             PlantType::Wallnut => "A sturdy wall that blocks zombies.",
+            PlantType::CherryBomb => "A cherry that explodes and damages all zombies in an area.",
         }
     }
 
@@ -28,6 +33,7 @@ impl PlantType {
             PlantType::SlowPeashooter => 125,
             PlantType::PotatoMine => 25,
             PlantType::Wallnut => 50,
+            PlantType::CherryBomb => 150,
         }
     }
 
@@ -38,6 +44,7 @@ impl PlantType {
             PlantType::SlowPeashooter => 7.5,
             PlantType::PotatoMine => 25.0,
             PlantType::Wallnut => 30.0,
+            PlantType::CherryBomb => 30.0,
         }
     }
 
@@ -99,6 +106,20 @@ impl PlantType {
                 // small flat mouth
                 draw_line(x - 3.0, y + 4.0, x + 3.0, y + 4.0, 1.0, BLACK);
             }
+            PlantType::CherryBomb => {
+                // two cherries with stem
+                // Left cherry
+                draw_circle(x - 6.0, y, 7.0, RED);
+                // Right cherry
+                draw_circle(x + 6.0, y, 7.0, RED);
+
+                // Cherry shine highlight
+                draw_circle(x - 7.5, y - 2.5, 2.0, PINK);
+                draw_circle(x + 4.5, y - 2.5, 2.0, PINK);
+
+                // Green stem
+                draw_line(x - 2.5, y - 7.0, x + 2.5, y - 11.0, 1.5, DARKGREEN);
+            }
         }
     }
 }
@@ -110,5 +131,6 @@ pub fn create_plant(plant_type: PlantType, x: f32, y: f32) -> Box<dyn Plant> {
         PlantType::Sunflower => Box::new(Sunflower::new(x, y)),
         PlantType::PotatoMine => Box::new(PotatoMine::new(x, y)),
         PlantType::Wallnut => Box::new(Wallnut::new(x, y)),
+        PlantType::CherryBomb => Box::new(CherryBomb::new(x, y)),
     }
 }

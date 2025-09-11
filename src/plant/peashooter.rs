@@ -1,5 +1,5 @@
 use crate::constants::*;
-use crate::factory::projectile_factory::{ProjectileFactory, ProjectileKind};
+use crate::factory::projectile_factory::ProjectileKind;
 use crate::plant::plant::{Plant, PlantAction};
 use crate::zombie::zombie::Zombie;
 use macroquad::prelude::*;

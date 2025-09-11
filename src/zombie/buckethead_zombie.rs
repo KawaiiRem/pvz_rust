@@ -1,7 +1,9 @@
 use macroquad::prelude::*;
 
 use crate::{
-    plant::plant::Plant, projectile::projectile::Instakill, zombie::{basic_zombie::BasicZombie, zombie::Zombie}
+    plant::plant::Plant,
+    projectile::projectile::Instakill,
+    zombie::{basic_zombie::BasicZombie, zombie::Zombie},
 };
 
 pub struct BucketheadZombie {
@@ -46,16 +48,10 @@ impl Zombie for BucketheadZombie {
         self.inner.draw();
 
         let x = self.inner.x();
-        let y = self.inner.y() - 60.0; 
+        let y = self.inner.y() - 60.0;
         let bucket_width = 40.0;
         let bucket_height = 30.0;
 
-        draw_rectangle(
-            x - bucket_width / 2.0,
-            y,
-            bucket_width,
-            bucket_height,
-            GRAY,
-        );
+        draw_rectangle(x - bucket_width / 2.0, y, bucket_width, bucket_height, GRAY);
     }
 }

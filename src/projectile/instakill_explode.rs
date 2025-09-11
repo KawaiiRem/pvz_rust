@@ -1,6 +1,6 @@
-use crate::{zombie::zombie::Zombie};
+use super::projectile::{Instakill, Projectile};
+use crate::zombie::zombie::Zombie;
 use macroquad::prelude::*;
-use super::projectile::{Projectile, Instakill};
 
 pub struct InstakillExplode {
     pub x: f32,
@@ -25,15 +25,17 @@ impl InstakillExplode {
 }
 
 impl Projectile for InstakillExplode {
-    fn x(&self) -> f32 { self.x }
-    fn y(&self) -> f32 { self.y }
-    fn is_active(&self) -> bool { self.active }
+    fn is_active(&self) -> bool {
+        self.active
+    }
 
     fn update(&mut self, dt: f32, zombies: &mut Vec<Box<dyn Zombie>>) {
         self.lifetime -= dt;
 
         for z in zombies.iter_mut() {
-            if z.is_dead() { continue; }
+            if z.is_dead() {
+                continue;
+            }
             let dx = z.x() - self.x;
             let dy = z.y() - self.y;
             if (dx * dx + dy * dy).sqrt() <= self.radius {

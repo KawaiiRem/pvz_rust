@@ -61,6 +61,12 @@ impl GameOver {
             BLACK,
         );
 
-        draw_text("Press ENTER to Restart", 20.0, screen_height() - 40.0, 25.0, WHITE);
+        draw_text(
+            "Press ENTER to Restart",
+            20.0,
+            screen_height() - 40.0,
+            25.0,
+            WHITE,
+        );
     }
 }

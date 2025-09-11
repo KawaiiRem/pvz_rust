@@ -8,7 +8,6 @@ use macroquad::prelude::*;
 pub struct PotatoMine {
     pub x: f32,
     pub y: f32,
-    pub cooldown: f32,
     pub timer: f32,
     pub health: i32,
     pub attack_range: f32,
@@ -20,7 +19,6 @@ impl PotatoMine {
         Self {
             x,
             y,
-            cooldown: 14.0,
             timer: 14.0,
             health: 100,
             attack_range: TILE_SIZE / 2.0,
@@ -64,10 +62,12 @@ impl Plant for PotatoMine {
         self.is_attacking = has_target;
 
         if has_target && self.timer <= 0.0 {
-            self.timer = self.cooldown;
             self.health = 0;
-            return Some(PlantAction::Shoot{
-                kind: ProjectileKind::Instakill { radius: TILE_SIZE * 1.5, tier: Instakill::Low },
+            return Some(PlantAction::Shoot {
+                kind: ProjectileKind::Instakill {
+                    radius: TILE_SIZE * 1.5,
+                    tier: Instakill::Low,
+                },
                 x: self.x,
                 y: self.y,
             });
@@ -84,7 +84,7 @@ impl Plant for PotatoMine {
             // armed → full potato mine
             draw_circle(self.x, self.y, 20.0, ORANGE);
             draw_circle(self.x, self.y, 18.0, BROWN);
-            
+
             draw_circle(self.x, self.y - 7.0, 3.0, WHITE);
             draw_circle(self.x, self.y + 7.0, 3.0, WHITE);
             draw_circle(self.x, self.y - 7.0, 1.5, BLACK);

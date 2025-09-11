@@ -1,23 +1,34 @@
-use macroquad::prelude::*;
+use crate::constants::{SCREEN_HEIGHT, SCREEN_WIDTH};
 use crate::game::Game;
 use crate::game_over::GameOver;
 use crate::game_state::GameState;
 use crate::plant_select::PlantSelect;
+use macroquad::prelude::*;
 
 mod constants;
+mod factory;
 mod game;
+mod game_over;
+mod game_state;
 mod grid;
 mod plant;
 mod plant_bar;
+mod plant_select;
 mod projectile;
 mod sun;
 mod zombie;
-mod factory;
-mod plant_select;
-mod game_state;
-mod game_over;
 
-#[macroquad::main("PVZ Rust")]
+fn window_conf() -> Conf {
+    Conf {
+        window_title: "PVZ Rust".to_string(),
+        window_width: SCREEN_WIDTH as i32,
+        window_height: SCREEN_HEIGHT as i32 + 100,
+        fullscreen: false,
+        ..Default::default()
+    }
+}
+
+#[macroquad::main(window_conf)]
 async fn main() {
     let mut state = GameState::PlantSelect;
     let mut plant_select = PlantSelect::new();
@@ -40,6 +51,7 @@ async fn main() {
 
                     if g.is_lost() {
                         state = GameState::GameOver;
+                        game = None;
                         game_over = GameOver::new();
                     }
                 }

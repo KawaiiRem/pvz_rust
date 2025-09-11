@@ -1,8 +1,6 @@
 use crate::zombie::{
-    basic_zombie::BasicZombie,
-    buckethead_zombie::BucketheadZombie,
-    conehead_zombie::ConeheadZombie,
-    zombie::Zombie,
+    basic_zombie::BasicZombie, buckethead_zombie::BucketheadZombie,
+    conehead_zombie::ConeheadZombie, zombie::Zombie,
 };
 use macroquad::rand::{self, ChooseRandom}; // <-- use macroquad RNG + trait for choose()
 
@@ -30,7 +28,6 @@ pub fn create_zombie(zombie_type: ZombieType, y: f32) -> Box<dyn Zombie> {
     }
 }
 
-
 fn base_rarity_weights() -> Vec<(Rarity, f32)> {
     vec![
         (Rarity::Common, 0.7),
@@ -47,11 +44,11 @@ fn get_scaled_rarity_weights(zombie_count: usize) -> Vec<(Rarity, f32)> {
 
     for (rarity, w) in &mut weights {
         match rarity {
-            Rarity::Common   => *w *= 1.0 - 0.5 * difficulty,
+            Rarity::Common => *w *= 1.0 - 0.5 * difficulty,
             Rarity::Uncommon => *w *= 1.0 + 0.2 * difficulty,
-            Rarity::Rare     => *w *= 1.0 + 1.0 * difficulty,
-            Rarity::Epic     => *w *= 1.0 + 3.0 * difficulty,
-            Rarity::Boss     => *w *= 1.0 + 6.0 * difficulty,
+            Rarity::Rare => *w *= 1.0 + 1.0 * difficulty,
+            Rarity::Epic => *w *= 1.0 + 3.0 * difficulty,
+            Rarity::Boss => *w *= 1.0 + 6.0 * difficulty,
         }
     }
 
@@ -64,7 +61,7 @@ fn get_scaled_rarity_weights(zombie_count: usize) -> Vec<(Rarity, f32)> {
 }
 
 fn pick_rarity(zombie_count: usize) -> Rarity {
-    let roll: f32 = rand::gen_range(0.0, 1.0); 
+    let roll: f32 = rand::gen_range(0.0, 1.0);
     let weights = get_scaled_rarity_weights(zombie_count);
 
     let mut acc = 0.0;
@@ -79,11 +76,11 @@ fn pick_rarity(zombie_count: usize) -> Rarity {
 
 fn zombies_by_rarity(rarity: Rarity) -> Vec<ZombieType> {
     match rarity {
-        Rarity::Common   => vec![ZombieType::Basic],
+        Rarity::Common => vec![ZombieType::Basic],
         Rarity::Uncommon => vec![ZombieType::Conehead],
-        Rarity::Rare     => vec![ZombieType::Conehead],
-        Rarity::Epic     => vec![ZombieType::Buckethead],
-        Rarity::Boss     => vec![ZombieType::Buckethead], // later: add Boss type
+        Rarity::Rare => vec![ZombieType::Conehead],
+        Rarity::Epic => vec![ZombieType::Buckethead],
+        Rarity::Boss => vec![ZombieType::Buckethead], // later: add Boss type
     }
 }
 

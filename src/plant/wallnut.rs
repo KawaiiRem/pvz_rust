@@ -40,17 +40,14 @@ impl Plant for Wallnut {
     }
 
     fn draw(&self) {
-        // --- Base body (taller oval like PvZ) ---
         draw_ellipse(self.x, self.y, 16.0, 22.0, 0.0, BROWN);
         draw_ellipse(self.x, self.y, 14.0, 20.0, 0.0, DARKBROWN);
 
-        // --- Eyes ---
         draw_circle(self.x - 6.0, self.y - 6.0, 3.5, WHITE);
         draw_circle(self.x + 6.0, self.y - 6.0, 3.5, WHITE);
         draw_circle(self.x - 6.0, self.y - 6.0, 1.8, BLACK);
         draw_circle(self.x + 6.0, self.y - 6.0, 1.8, BLACK);
 
-        // --- Flat mouth ---
         draw_line(
             self.x - 6.0,
             self.y + 7.0,
@@ -68,8 +65,22 @@ impl Plant for Wallnut {
         }
         if hp_ratio < 0.33 {
             // heavier cracks
-            draw_line(self.x + 4.0, self.y - 4.0, self.x + 10.0, self.y + 2.0, 1.5, BLACK);
-            draw_line(self.x - 3.0, self.y + 10.0, self.x + 2.0, self.y + 14.0, 1.5, BLACK);
+            draw_line(
+                self.x + 4.0,
+                self.y - 4.0,
+                self.x + 10.0,
+                self.y + 2.0,
+                1.5,
+                BLACK,
+            );
+            draw_line(
+                self.x - 3.0,
+                self.y + 10.0,
+                self.x + 2.0,
+                self.y + 14.0,
+                1.5,
+                BLACK,
+            );
         }
     }
 }

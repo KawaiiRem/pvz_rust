@@ -1,7 +1,7 @@
 use std::cmp::min;
 
 use crate::constants::*;
-use crate::factory::plant_factory::{create_plant, PlantType};
+use crate::factory::plant_factory::{PlantType, create_plant};
 use crate::factory::projectile_factory::ProjectileFactory;
 use crate::factory::zombie_factory::spawn_random_zombie;
 use crate::grid::Grid;
@@ -21,7 +21,7 @@ pub struct Game {
     pub sun_points: i32,
     pub natural_sun_timer: f32,
     pub next_natural_sun_time: f32,
-    pub zombies: Vec<Box<dyn Zombie>>, 
+    pub zombies: Vec<Box<dyn Zombie>>,
     pub zombie_timer: f32,
     pub next_zombie_time: f32,
     pub zombie_count: i32,
@@ -113,7 +113,7 @@ impl Game {
                     PlantAction::Shoot { kind, x, y } => {
                         let proj = ProjectileFactory::create(kind, x, y);
                         self.projectiles.push(proj);
-                    },
+                    }
                     PlantAction::ProduceSun { x, y } => self.suns.push(Sun::from_plant(x, y)),
                 }
             }
@@ -170,7 +170,10 @@ impl Game {
 
                     let y = lane as f32 * TILE_SIZE + TILE_SIZE / 2.0 + UI_BAR_HEIGHT;
 
-                    self.zombies.push(spawn_random_zombie(y, self.zombie_count.try_into().unwrap()));
+                    self.zombies.push(spawn_random_zombie(
+                        y,
+                        self.zombie_count.try_into().unwrap(),
+                    ));
                     self.zombie_count += 1;
                 }
             }
