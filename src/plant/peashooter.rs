@@ -74,7 +74,13 @@ impl Plant for Peashooter {
     }
 
     fn draw(&self) {
+        // Body
         draw_circle(self.x, self.y, 20.0, GREEN);
-        draw_circle(self.x + 20.0, self.y, 10.0, DARKGREEN); // head
+        // Head (pea cannon)
+        draw_circle(self.x + 20.0, self.y, 10.0, DARKGREEN);
+
+        // Eyes
+        draw_circle(self.x - 6.0, self.y - 5.0, 2.0, BLACK);
+        draw_circle(self.x + 6.0, self.y - 5.0, 2.0, BLACK);
     }
 }

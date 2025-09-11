@@ -74,7 +74,13 @@ impl Plant for SlowPeashooter {
     }
 
     fn draw(&self) {
+        // Body
         draw_circle(self.x, self.y, 20.0, BLUE);
-        draw_circle(self.x + 20.0, self.y, 10.0, DARKBLUE); // head
+        // Head (pea cannon)
+        draw_circle(self.x + 20.0, self.y, 10.0, DARKBLUE);
+
+        // Eyes
+        draw_circle(self.x - 6.0, self.y - 5.0, 2.0, BLACK);
+        draw_circle(self.x + 6.0, self.y - 5.0, 2.0, BLACK);
     }
 }

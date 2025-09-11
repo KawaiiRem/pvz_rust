@@ -1,4 +1,4 @@
-use crate::plant::{peashooter::Peashooter, plant::Plant, potato_mine::PotatoMine, slow_peashooter::SlowPeashooter, sunflower::Sunflower};
+use crate::plant::{peashooter::Peashooter, plant::Plant, potato_mine::PotatoMine, slow_peashooter::SlowPeashooter, sunflower::Sunflower, wallnut::Wallnut};
 use strum_macros::EnumIter;
 use macroquad::prelude::*;
 
@@ -8,6 +8,7 @@ pub enum PlantType {
     Peashooter,
     SlowPeashooter,
     PotatoMine,
+    Wallnut,
 }
 impl PlantType {
     pub fn description(&self) -> &'static str {
@@ -16,6 +17,7 @@ impl PlantType {
             PlantType::Sunflower => "Produces sun over time.",
             PlantType::SlowPeashooter => "Shoots peas that slow down zombies.",
             PlantType::PotatoMine => "Explodes when a zombie steps on it when fully grown.",
+            PlantType::Wallnut => "A sturdy wall that blocks zombies.",
         }
     }
 
@@ -25,6 +27,7 @@ impl PlantType {
             PlantType::Sunflower => 50,
             PlantType::SlowPeashooter => 125,
             PlantType::PotatoMine => 25,
+            PlantType::Wallnut => 50,
         }
     }
 
@@ -34,36 +37,67 @@ impl PlantType {
             PlantType::Sunflower => 7.5,
             PlantType::SlowPeashooter => 7.5,
             PlantType::PotatoMine => 25.0,
+            PlantType::Wallnut => 30.0,
         }
     }
 
     pub fn draw_preview(&self, x: f32, y: f32) {
         match self {
             PlantType::Peashooter => {
-                draw_circle(x, y, 10.0, GREEN);           // body smaller
-                draw_circle(x + 10.0, y, 5.0, DARKGREEN); // head smaller
-            }
-            PlantType::Sunflower => {
-                draw_circle(x, y, 9.0, YELLOW);           // outer
-                draw_circle(x, y, 5.0, ORANGE);           // inner
+                // body + head (small version)
+                draw_circle(x, y, 10.0, GREEN);
+                draw_circle(x + 10.0, y, 5.0, DARKGREEN);
+
+                // eyes (forward-facing, serious)
+                draw_circle(x - 4.0, y - 3.0, 1.2, BLACK);
+                draw_circle(x + 2.0, y - 3.0, 1.2, BLACK);
             }
             PlantType::SlowPeashooter => {
                 draw_circle(x, y, 10.0, BLUE);
                 draw_circle(x + 10.0, y, 5.0, DARKBLUE);
+
+                // eyes
+                draw_circle(x - 4.0, y - 3.0, 1.2, BLACK);
+                draw_circle(x + 2.0, y - 3.0, 1.2, BLACK);
+            }
+            PlantType::Sunflower => {
+                draw_circle(x, y, 9.0, YELLOW); // petals
+                draw_circle(x, y, 5.0, ORANGE); // center
+
+                // happy eyes
+                draw_circle(x - 2.5, y - 2.0, 1.0, BLACK);
+                draw_circle(x + 2.5, y - 2.0, 1.0, BLACK);
+
+                // smile
+                draw_line(x - 3.0, y + 2.0, x + 3.0, y + 2.0, 1.0, BLACK);
             }
             PlantType::PotatoMine => {
                 // body
                 draw_circle(x, y, 10.0, ORANGE);
                 draw_circle(x, y, 9.0, BROWN);
 
-                // eyes (scaled down)
-                draw_circle(x, y - 3.5, 1.5, WHITE);
-                draw_circle(x, y + 3.5, 1.5, WHITE);
-                draw_circle(x, y - 3.5, 0.75, BLACK);
-                draw_circle(x, y + 3.5, 0.75, BLACK);
+                // eyes
+                draw_circle(x - 3.0, y - 2.0, 1.2, WHITE);
+                draw_circle(x + 3.0, y - 2.0, 1.2, WHITE);
+                draw_circle(x - 3.0, y - 2.0, 0.6, BLACK);
+                draw_circle(x + 3.0, y - 2.0, 0.6, BLACK);
 
                 // fuse
-                draw_circle(x + 7.0, y, 2.0, RED);
+                draw_circle(x + 6.0, y - 4.0, 1.5, RED);
+            }
+            PlantType::Wallnut => {
+                // main oval body (taller than before)
+                draw_ellipse(x, y, 8.0, 12.0, 0.0, BROWN);
+                draw_ellipse(x, y, 7.0, 11.0, 0.0, DARKBROWN);
+
+                // goofy eyes
+                draw_circle(x - 2.5, y - 3.0, 1.2, WHITE);
+                draw_circle(x + 2.5, y - 3.0, 1.2, WHITE);
+                draw_circle(x - 2.5, y - 3.0, 0.6, BLACK);
+                draw_circle(x + 2.5, y - 3.0, 0.6, BLACK);
+
+                // small flat mouth
+                draw_line(x - 3.0, y + 4.0, x + 3.0, y + 4.0, 1.0, BLACK);
             }
         }
     }
@@ -75,5 +109,6 @@ pub fn create_plant(plant_type: PlantType, x: f32, y: f32) -> Box<dyn Plant> {
         PlantType::SlowPeashooter => Box::new(SlowPeashooter::new(x, y)),
         PlantType::Sunflower => Box::new(Sunflower::new(x, y)),
         PlantType::PotatoMine => Box::new(PotatoMine::new(x, y)),
+        PlantType::Wallnut => Box::new(Wallnut::new(x, y)),
     }
 }

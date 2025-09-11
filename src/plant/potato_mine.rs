@@ -89,7 +89,7 @@ impl Plant for PotatoMine {
             draw_circle(self.x, self.y - 7.0, 1.5, BLACK);
             draw_circle(self.x, self.y + 7.0, 1.5, BLACK);
 
-            draw_circle(self.x + 15.0, self.y, 4.0, RED);
+            draw_circle(self.x + 12.0, self.y - 8.0, 4.0, RED);
         }
     }
 }

@@ -3,3 +3,4 @@ pub mod plant;
 pub mod slow_peashooter;
 pub mod sunflower;
 pub mod potato_mine;
+pub mod wallnut;

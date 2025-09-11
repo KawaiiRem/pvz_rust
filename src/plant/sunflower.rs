@@ -50,7 +50,16 @@ impl Plant for Sunflower {
     }
 
     fn draw(&self) {
+        // Petals
         draw_circle(self.x, self.y, 18.0, YELLOW);
-        draw_circle(self.x, self.y, 10.0, ORANGE); // center
+        // Center
+        draw_circle(self.x, self.y, 10.0, ORANGE);
+
+        // Eyes
+        draw_circle(self.x - 4.0, self.y - 2.0, 1.5, BLACK);
+        draw_circle(self.x + 4.0, self.y - 2.0, 1.5, BLACK);
+
+        // Smile
+        draw_line(self.x - 4.0, self.y + 3.0, self.x + 4.0, self.y + 3.0, 1.5, BLACK);
     }
 }
