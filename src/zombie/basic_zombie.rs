@@ -2,6 +2,7 @@ use macroquad::prelude::*;
 
 use crate::constants::*;
 use crate::plant::plant::Plant;
+use crate::projectile::Instakill;
 use crate::zombie::zombie::{Zombie, ZombieState};
 
 pub struct BasicZombie {
@@ -61,7 +62,7 @@ impl Zombie for BasicZombie {
         }
     }
 
-    fn is_instakill(&mut self, amount: i32) {
+    fn is_instakill(&mut self, tier: Instakill) {
         self.health = 0;
     }
 

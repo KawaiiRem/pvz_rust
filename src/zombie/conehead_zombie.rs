@@ -1,8 +1,7 @@
 use macroquad::prelude::*;
 
 use crate::{
-    plant::plant::Plant,
-    zombie::{basic_zombie::BasicZombie, zombie::Zombie},
+    plant::plant::Plant, projectile::Instakill, zombie::{basic_zombie::BasicZombie, zombie::Zombie}
 };
 
 pub struct ConeheadZombie {
@@ -39,8 +38,8 @@ impl Zombie for ConeheadZombie {
     fn is_dead(&self) -> bool {
         self.inner.is_dead()
     }
-    fn is_instakill(&mut self, amount: i32) {
-        self.inner.is_instakill(amount);
+    fn is_instakill(&mut self, tier: Instakill) {
+        self.inner.is_instakill(tier);
     }
 
     fn draw(&self) {

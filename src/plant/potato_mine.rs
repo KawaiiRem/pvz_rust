@@ -1,6 +1,6 @@
 use crate::constants::*;
 use crate::plant::plant::{Plant, PlantAction};
-use crate::projectile::{Projectile, ProjectileType};
+use crate::projectile::{Instakill, Projectile, ProjectileType};
 use crate::zombie::zombie::Zombie;
 use macroquad::prelude::*;
 
@@ -68,7 +68,7 @@ impl Plant for PotatoMine {
             return Some(PlantAction::Shoot(Projectile::new(
                 self.x,
                 self.y,
-                ProjectileType::Explosive { radius: TILE_SIZE * 1.5 },
+                ProjectileType::Instakill { radius: TILE_SIZE * 1.5, tier: Instakill::Low },
             )));
         }
         None

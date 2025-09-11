@@ -1,4 +1,4 @@
-use crate::plant::plant::Plant;
+use crate::{plant::plant::Plant, projectile::Instakill};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum ZombieState {
@@ -15,7 +15,7 @@ pub trait Zombie {
 
     fn take_damage(&mut self, amount: i32);
     fn apply_slow(&mut self, duration: f32);
-    fn is_instakill(&mut self, amount: i32);
+    fn is_instakill(&mut self, tier: Instakill);
 
     fn update(&mut self, plants: &mut Vec<Box<dyn Plant>>);
     fn draw(&self);
