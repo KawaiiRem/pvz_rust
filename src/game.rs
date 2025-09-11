@@ -1,21 +1,22 @@
 use std::cmp::min;
 
 use crate::constants::*;
+use crate::factory::plant_factory::{create_plant, PlantType};
+use crate::factory::projectile_factory::ProjectileFactory;
+use crate::factory::zombie_factory::spawn_random_zombie;
 use crate::grid::Grid;
 use crate::plant::plant::{Plant, PlantAction};
 use crate::plant_bar::UIBar;
-use crate::plant_factory::{create_plant, PlantType};
-use crate::projectile::Projectile;
+use crate::projectile::projectile::Projectile;
 use crate::sun::Sun;
 use crate::zombie::zombie::Zombie;
-use crate::zombie_factory::{spawn_random_zombie};
 use macroquad::prelude::*;
 
 pub struct Game {
     pub grid: Grid,
     pub plant_bar: UIBar,
     pub plants: Vec<Box<dyn Plant>>,
-    pub projectiles: Vec<Projectile>,
+    pub projectiles: Vec<Box<dyn Projectile>>,
     pub suns: Vec<Sun>,
     pub sun_points: i32,
     pub natural_sun_timer: f32,
@@ -109,7 +110,10 @@ impl Game {
         for plant in &mut self.plants {
             if let Some(action) = plant.update(dt, &self.zombies) {
                 match action {
-                    PlantAction::Shoot(proj) => self.projectiles.push(proj),
+                    PlantAction::Shoot { kind, x, y } => {
+                        let proj = ProjectileFactory::create(kind, x, y);
+                        self.projectiles.push(proj);
+                    },
                     PlantAction::ProduceSun { x, y } => self.suns.push(Sun::from_plant(x, y)),
                 }
             }
@@ -119,7 +123,7 @@ impl Game {
         for proj in &mut self.projectiles {
             proj.update(dt, &mut self.zombies);
         }
-        self.projectiles.retain(|p| p.active);
+        self.projectiles.retain(|p| p.is_active());
 
         // --- update suns ---
         for sun in &mut self.suns {

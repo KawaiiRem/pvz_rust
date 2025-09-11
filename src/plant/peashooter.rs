@@ -1,6 +1,6 @@
 use crate::constants::*;
+use crate::factory::projectile_factory::{ProjectileFactory, ProjectileKind};
 use crate::plant::plant::{Plant, PlantAction};
-use crate::projectile::{Projectile, ProjectileType};
 use crate::zombie::zombie::Zombie;
 use macroquad::prelude::*;
 
@@ -64,11 +64,11 @@ impl Plant for Peashooter {
 
         if has_target && self.timer <= 0.0 {
             self.timer = self.cooldown;
-            return Some(PlantAction::Shoot(Projectile::new(
-                self.x + 25.0,
-                self.y,
-                ProjectileType::Normal,
-            )));
+            return Some(PlantAction::Shoot {
+                kind: ProjectileKind::Normal,
+                x: self.x + 25.0,
+                y: self.y,
+            });
         }
         None
     }

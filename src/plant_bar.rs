@@ -1,4 +1,4 @@
-use crate::{constants::*, plant_factory::PlantType, };
+use crate::{constants::*, factory::plant_factory::PlantType, };
 use macroquad::prelude::*;
 
 pub struct UISlot {

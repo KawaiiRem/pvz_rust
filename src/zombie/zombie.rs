@@ -1,4 +1,4 @@
-use crate::{plant::plant::Plant, projectile::Instakill};
+use crate::{plant::plant::Plant, projectile::projectile::Instakill};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum ZombieState {

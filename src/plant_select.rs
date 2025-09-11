@@ -1,7 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::plant_factory::PlantType;
-use crate::constants::*;
+use crate::{constants::*, factory::plant_factory::PlantType};
 use strum::IntoEnumIterator;
 
 pub struct PlantSelect {

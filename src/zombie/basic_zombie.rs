@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 use crate::constants::*;
 use crate::plant::plant::Plant;
-use crate::projectile::Instakill;
+use crate::projectile::projectile::Instakill;
 use crate::zombie::zombie::{Zombie, ZombieState};
 
 pub struct BasicZombie {

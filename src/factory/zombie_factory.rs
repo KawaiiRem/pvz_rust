@@ -35,7 +35,7 @@ fn base_rarity_weights() -> Vec<(Rarity, f32)> {
     vec![
         (Rarity::Common, 0.7),
         (Rarity::Uncommon, 0.2),
-        (Rarity::Rare, 0.08),
+        (Rarity::Rare, 0.07),
         (Rarity::Epic, 0.015),
         (Rarity::Boss, 0.005),
     ]
@@ -81,8 +81,8 @@ fn zombies_by_rarity(rarity: Rarity) -> Vec<ZombieType> {
     match rarity {
         Rarity::Common   => vec![ZombieType::Basic],
         Rarity::Uncommon => vec![ZombieType::Conehead],
-        Rarity::Rare     => vec![ZombieType::Buckethead],
-        Rarity::Epic     => vec![ZombieType::Conehead, ZombieType::Buckethead],
+        Rarity::Rare     => vec![ZombieType::Conehead],
+        Rarity::Epic     => vec![ZombieType::Buckethead],
         Rarity::Boss     => vec![ZombieType::Buckethead], // later: add Boss type
     }
 }
