@@ -10,6 +10,15 @@ pub enum PlantType {
     PotatoMine,
 }
 impl PlantType {
+    pub fn description(&self) -> &'static str {
+        match self {
+            PlantType::Peashooter => "Shoots peas at zombies.",
+            PlantType::Sunflower => "Produces sun over time.",
+            PlantType::SlowPeashooter => "Shoots peas that slow down zombies.",
+            PlantType::PotatoMine => "Explodes when a zombie steps on it when fully grown.",
+        }
+    }
+
     pub fn cost(&self) -> i32 {
         match self {
             PlantType::Peashooter => 100,
