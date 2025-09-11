@@ -21,6 +21,7 @@ pub trait Plant {
     fn take_damage(&mut self, amount: i32);
 
     fn update(&mut self, dt: f32, zombies: &[Box<dyn Zombie>]) -> Option<PlantAction>;
+    fn is_tall(&self) -> bool;
     fn draw(&self);
 
     fn is_dead(&self) -> bool {

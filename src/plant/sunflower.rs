@@ -32,6 +32,9 @@ impl Plant for Sunflower {
     fn health(&self) -> i32 {
         self.health
     }
+    fn is_tall(&self) -> bool {
+        false
+    }
 
     fn take_damage(&mut self, amount: i32) {
         self.health -= amount;

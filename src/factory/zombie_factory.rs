@@ -18,6 +18,7 @@ pub enum ZombieType {
     Basic,
     Conehead,
     Buckethead,
+    PoleZombie,
 }
 
 pub fn create_zombie(zombie_type: ZombieType, y: f32) -> Box<dyn Zombie> {
@@ -25,6 +26,7 @@ pub fn create_zombie(zombie_type: ZombieType, y: f32) -> Box<dyn Zombie> {
         ZombieType::Basic => Box::new(BasicZombie::new(y)),
         ZombieType::Conehead => Box::new(ConeheadZombie::new(y)),
         ZombieType::Buckethead => Box::new(BucketheadZombie::new(y)),
+        ZombieType::PoleZombie => Box::new(crate::zombie::pole_zombie::PoleZombie::new(y)),
     }
 }
 
@@ -76,8 +78,8 @@ fn pick_rarity(zombie_count: usize) -> Rarity {
 
 fn zombies_by_rarity(rarity: Rarity) -> Vec<ZombieType> {
     match rarity {
-        Rarity::Common => vec![ZombieType::Basic],
-        Rarity::Uncommon => vec![ZombieType::Conehead],
+        Rarity::Common => vec![ZombieType::Basic, ZombieType::PoleZombie],
+        Rarity::Uncommon => vec![ZombieType::Conehead, ZombieType::PoleZombie],
         Rarity::Rare => vec![ZombieType::Conehead],
         Rarity::Epic => vec![ZombieType::Buckethead],
         Rarity::Boss => vec![ZombieType::Buckethead], // later: add Boss type

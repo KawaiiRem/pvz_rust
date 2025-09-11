@@ -5,6 +5,7 @@ pub enum ZombieState {
     Walking,
     Attacking,
     Dead,
+    Jumping,
 }
 
 pub trait Zombie {
